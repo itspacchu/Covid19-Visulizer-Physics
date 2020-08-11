@@ -1,14 +1,18 @@
-function dcircle(x,y,r,txt,colval=color(255,125,125)){
+function dcircle(x,y,r,txt,indexval=0){
     this.body = Bodies.circle(x,y,r);
     World.add(world,this.body);
+    var m1 = color(255,125,125);
+    var m2 = color(125,255,125);
 
     this.show = function(){
         let pos = this.body.position;
         push();
         translate(pos.x, pos.y);
-        fill(colval);
+        c = map(indexval,0,184,125,255);
+        cd = map(indexval,0,184,255,125);
+        fill(color(cd,c,125));
         ellipse(0,0,r*2);
-        fill(255)
+        fill(42)
         
         textAlign(CENTER);
         if(r > 300){

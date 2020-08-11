@@ -18,7 +18,7 @@ let coviddata;
 let covdata = [];
 let jsonfile;
 let maxdata = 0;
-normlizeMultiplier = screen.width/10;
+normlizeMultiplier = window.innerWidth/5;
 
 function preload() {
   americanCaptain = loadFont('fonts/ac.ttf');
@@ -37,7 +37,7 @@ function preload() {
 }
 
 function setup() {
-  width = windowWidth;
+  width = window.innerWidth;
   height = windowHeight;
   Engine.run(engine);
   
@@ -50,7 +50,7 @@ function setup() {
   upperbox = Bodies.rectangle(width/2 ,0,width,10, {isStatic : true});
   lowerbox = Bodies.rectangle(width/2 ,height ,width,10, {isStatic : true});
   leftbox = Bodies.rectangle(0 , height/2 ,10,height, {isStatic : true});
-  rightbox = Bodies.rectangle(2*height - 25,height/2,10,height, {isStatic : true});
+  rightbox = Bodies.rectangle(width ,height/2,10,height, {isStatic : true});
   World.add(world,[upperbox,lowerbox,leftbox,rightbox]);
   createCanvas(width, height);
 
@@ -69,11 +69,11 @@ function setup() {
   //let maxi = 150;
   for(let i=0;i<maxi;i++){
     let normalizedRad = normlizeMultiplier*covdata[i].totalcases/maxdata;
-    if(normalizedRad < 5){
+    if(normalizedRad < 1){
       continue;
     }
     console.log("fetching " + covdata[i].country + "index :", + i);
-    databalls.push(new dcircle(map(i,0,maxi,maxi,width-maxi),map(i,0,maxi,maxi,height-maxi),normalizedRad,covdata[i].country));
+    databalls.push(new dcircle(map(i,0,maxi,maxi,width-maxi),map(i,0,maxi,maxi,height-maxi),normalizedRad,covdata[i].country,i));
   }
   
 
@@ -81,6 +81,7 @@ function setup() {
 }
 
 function draw() {
+
   // Redrawing again for live window scaling
   width = windowWidth;
   height = windowHeight;
@@ -88,7 +89,7 @@ function draw() {
   MouseManip();
   
   background(42);
-  
+  noStroke();
   /** 
   if(!coviddata){
     text('API is Unresponsive?!', width/2 , height/2);
