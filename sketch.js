@@ -27,17 +27,17 @@ function preload() {
   americanCaptain = loadFont('fonts/ac.ttf');
   VCR = loadFont('fonts/vcr.ttf');
   um = loadFont('fonts/um.ttf');
-  //let url = 'https://api.covid19api.com/summary'
-  //let url = 'https://earthquake.usgs.gov/fdsnws/event/1/application.json'
-  /**
- 
-   
-  let url = ' ';
+  let url = 'https://api.covid19api.com/summary'
   httpGet(url,'jsonp',false , function(response){
     coviddata = response;
   });
-  */
- jsonfile = loadJSON("debugdataset.json");
+
+  if(coviddata){
+    jsonfile = coviddata;
+  }else{
+    jsonfile = loadJSON("debugdataset.json");
+  }
+ 
 }
 
 function setup() {
@@ -70,7 +70,6 @@ function setup() {
       covdata.push(new covidreqdata(jsonfile.Countries[i].Country,jsonfile.Countries[i].TotalConfirmed));
   }
 
-  sort(covdata)
 
   databalls = [];
   let maxi = covdata.length;
@@ -98,11 +97,7 @@ function draw() {
   
   background(42);
   noStroke();
-  /** 
-  if(!coviddata){
-    text('API is Unresponsive?!', width/2 , height/2);
-  }
-  */
+
  for(let i=0;i<databalls.length;i++){
   databalls[i].show();
  }
@@ -113,6 +108,14 @@ function draw() {
   world.gravity.y = 0.01*(cos(frameCount/100) + cos(frameCount/400)  + cos(frameCount/1000) )   ;
   //textFont(americanCaptain);
   textFont(um);
+  fill(255);
+  textSize(12);
+    if(!coviddata){
+      text('API Unresponsive - using debugdataset.json', 10 , height - 25);
+      text('This data is collected on 11:AUG:2020', 10 , height - 10);
+
+  }
+
 
 }
 
