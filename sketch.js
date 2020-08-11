@@ -10,7 +10,8 @@ var Engine = Matter.Engine,
 var engine = Engine.create(),
         world = engine.world;
 
-world.gravity.scale = 0;
+world.gravity.scale = 0.0001;
+
 
 
 
@@ -20,9 +21,12 @@ let jsonfile;
 let maxdata = 0;
 normlizeMultiplier = window.innerWidth/5;
 
+
+
 function preload() {
   americanCaptain = loadFont('fonts/ac.ttf');
   VCR = loadFont('fonts/vcr.ttf');
+  um = loadFont('fonts/um.ttf');
   //let url = 'https://api.covid19api.com/summary'
   //let url = 'https://earthquake.usgs.gov/fdsnws/event/1/application.json'
   /**
@@ -39,6 +43,10 @@ function preload() {
 function setup() {
   width = window.innerWidth;
   height = windowHeight;
+  thecanvas = createCanvas(width, height);
+  thecanvas.position(0,0);
+  thecanvas.style('z-index','-1');
+
   Engine.run(engine);
   
   if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
@@ -52,7 +60,7 @@ function setup() {
   leftbox = Bodies.rectangle(0 , height/2 ,10,height, {isStatic : true});
   rightbox = Bodies.rectangle(width ,height/2,10,height, {isStatic : true});
   World.add(world,[upperbox,lowerbox,leftbox,rightbox]);
-  createCanvas(width, height);
+  
 
   for(let i=0;i<jsonfile.Countries.length;i++){
       if(jsonfile.Countries[i].TotalConfirmed > maxdata){
@@ -101,14 +109,11 @@ function draw() {
 
 
 
-
-  // Text after Balls
-  fill(255);
-  textSize(32);
+  world.gravity.x = (sin(frameCount/100) + sin(frameCount/1000) + sin(frameCount/500))/10;
+  world.gravity.y = 0.01*(cos(frameCount/100) + cos(frameCount/400)  + cos(frameCount/1000) )   ;
   //textFont(americanCaptain);
-  textFont(VCR);
-  textAlign(CENTER);
-  text('COVID19  Stats', width/2 , 50);
+  textFont(um);
+
 }
 
 
@@ -121,4 +126,20 @@ function MouseManip(){
             }
         });
         World.add(world, mouseConstraint);
+}
+
+function windowResized(){
+  
+  width = window.innerWidth;
+  height = windowHeight;
+  normlizeMultiplier = width/5;
+  thecanvas = createCanvas(width, height);
+  thecanvas.position(0,0);
+  thecanvas.style('z-index','-1');
+  World.remove(world,[upperbox,lowerbox,leftbox,rightbox])
+  upperbox = Bodies.rectangle(width/2 ,0,width,10, {isStatic : true});
+  lowerbox = Bodies.rectangle(width/2 ,height ,width,10, {isStatic : true});
+  leftbox = Bodies.rectangle(0 , height/2 ,10,height, {isStatic : true});
+  rightbox = Bodies.rectangle(width ,height/2,10,height, {isStatic : true});
+  World.add(world,[upperbox,lowerbox,leftbox,rightbox]);
 }
