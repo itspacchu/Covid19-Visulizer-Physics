@@ -28,7 +28,7 @@ function preload() {
   VCR = loadFont('fonts/vcr.ttf');
   um = loadFont('fonts/um.ttf');
   let url = 'https://api.covid19api.com/summary'
-  httpGet(url,'jsonp',false , function(response){
+  httpGet(url,'json',false , function(response){
     coviddata = response;
   });
 
